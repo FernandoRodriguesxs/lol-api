@@ -1,32 +1,36 @@
-import { useState } from 'react'
-
-// const api = {
-//   key: 'RGAPI-bc6c10b4-c3b7-4318-97f0-44b8ffaf054e',
-//   base: 'br1.api.riotgames.com',
-// }
+import { useEffect, useState } from 'react'
 
 export const App = () => {
-  const [search, setSearch] = useState('') // estado da pesquisa setado sem valor inicial
-  console.log(search)
+  const [agentsData, setAgentsData] = useState<any[]>([])
 
-  const pesquisaPlayer = () => {
-    fetch(`https://valorant-api.com/v1/agents`)
-      .then((res) => res.json())
-      .then((result) => {
-        setSearch(result) // passando o result para o estado SetSearch
-        console.log(setSearch) // Este log deve estar dentro do bloco .then
-      })
-      .catch((error) => {
-        console.error('Ocorreu um erro na solicitação:', error)
-      })
+  const fetchValorantAgents = async () => {
+    try {
+      const response = await fetch('https://valorant-api.com/v1/agents')
+      const data = await response.json()
+      setAgentsData(data.data) // Assume que a resposta tem uma propriedade "data" com a lista de agentes
+    } catch (error) {
+      console.error('Erro ao buscar agentes:', error)
+    }
   }
+
+  useEffect(() => {
+    fetchValorantAgents()
+  }, [])
+
   return (
-    <>
-      <div className="box-app">
-        <h4>League of Legends App</h4>
-        <input type="text" onChange={(e) => setSearch(e.target.value)}></input>
-        <button onClick={pesquisaPlayer}>Search</button>
-      </div>
-    </>
+    <div className="box-app">
+      <h1>Valorant App</h1>
+      <section className="container-agents">
+        {agentsData.map((agent) => (
+          <ul key={agent.id}>
+            <li>
+              <img alt="#" src={agent?.displayIcon} />
+              <h2>{agent?.displayName} </h2>
+              <p>{agent?.description}</p>
+            </li>
+          </ul>
+        ))}
+      </section>
+    </div>
   )
 }
