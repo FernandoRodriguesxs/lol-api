@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Hero, Wrapper } from './assets/app.styles'
 
 export const App = () => {
   const [agentsData, setAgentsData] = useState<any[]>([])
@@ -18,19 +19,21 @@ export const App = () => {
   }, [])
 
   return (
-    <div className="box-app">
-      <h1>Valorant App</h1>
-      <section className="container-agents">
-        {agentsData.map((agent) => (
-          <ul key={agent.id}>
-            <li>
-              <img alt="#" src={agent?.displayIcon} />
-              <h2>{agent?.displayName} </h2>
-              <p>{agent?.description}</p>
-            </li>
-          </ul>
-        ))}
-      </section>
-    </div>
+    <Wrapper>
+      <Hero>
+        <h1>Valorant Agents</h1>
+        <section className="container-agents">
+          {agentsData.map((agent) => (
+            <ul key={agent.id}>
+              <li className="box-agent">
+                <img alt="#" src={agent?.displayIcon} />
+                <h2>{agent?.displayName} </h2>
+                <p>{agent?.description}</p>
+              </li>
+            </ul>
+          ))}
+        </section>
+      </Hero>
+    </Wrapper>
   )
 }
